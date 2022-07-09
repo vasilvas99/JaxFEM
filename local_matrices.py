@@ -26,12 +26,13 @@ def isoparametric_coord(verts, p, i):
     return verts[:, i].dot(f_eval)
 
 
-def x_y(verts, p):
-    return jnp.array([isoparametric_coord(verts, p, 0), isoparametric_coord(verts, p, 1)])
+def real_coords(verts, p):
+    real_coords = [isoparametric_coord(verts, p, i) for i in range(len(p))]
+    return jnp.array(real_coords)
 
 
-xy_jitted = jax.jit(x_y)
-xy_jac = jax.jacfwd(xy_jitted, argnums=1)
+real_coords_jitted = jax.jit(real_coords)
+real_coords_jac = jax.jacfwd(real_coords_jitted, argnums=1)
 
 
 def triangle_quadrature(verts, integrand):
@@ -45,7 +46,7 @@ def triangle_quadrature(verts, integrand):
 
 def local_mass_integrand(verts, p):
     f_eval = jnp.array(list(map(lambda f: f(p), shapes)))
-    return jnp.outer(f_eval.T, f_eval) * jnp.linalg.det(xy_jac(verts, p))
+    return jnp.outer(f_eval.T, f_eval) * jnp.linalg.det(real_coords_jac(verts, p))
 
 
 local_mass_integrand_jitted = jax.jit(local_mass_integrand)
@@ -56,11 +57,12 @@ def local_mass(verts):
     return triangle_quadrature(verts, lmi)
 
 
+
 def local_stiffness_integrand(verts, p):
-    grad_shape_eval_T = jnp.array(list(map(lambda f: f(p), grad_shapes)))
-    jac_T = xy_jac(verts, p)
-    jac_inv_T = jnp.linalg.inv(jac_T)
-    return (grad_shape_eval_T@jac_inv_T@jac_inv_T.T@grad_shape_eval_T.T)*jnp.linalg.det(jac_T)
+    grad_shape_eval = jnp.array(list(map(lambda f: f(p), grad_shapes)))
+    jac = real_coords_jac(verts, p)
+    jac_inv = jnp.linalg.inv(jac)
+    return (grad_shape_eval@jac_inv@jac_inv.T@grad_shape_eval.T)*jnp.linalg.det(jac)
 
 
 local_stiffness_integrand_jitted = jax.jit(local_stiffness_integrand)
@@ -95,7 +97,7 @@ def test_vmap(n):
     return monotonic() - t
 
 if __name__ == "__main__":
-    n = 5_000_000
+    n = 100_000
     delta = test_vmap(n)
     print(f'Time taken to run {n} samples {delta}')
     print(f'Single run time {delta/n}')
