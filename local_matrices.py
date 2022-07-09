@@ -31,8 +31,7 @@ def real_coords(verts, p):
     return jnp.array(real_coords)
 
 
-real_coords_jitted = jax.jit(real_coords)
-real_coords_jac = jax.jacfwd(real_coords_jitted, argnums=1)
+real_coords_jac = jax.jacfwd(real_coords, argnums=1)
 
 
 def triangle_quadrature(verts, integrand):
@@ -49,13 +48,9 @@ def local_mass_integrand(verts, p):
     return jnp.outer(f_eval.T, f_eval) * jnp.linalg.det(real_coords_jac(verts, p))
 
 
-local_mass_integrand_jitted = jax.jit(local_mass_integrand)
-
-
 def local_mass(verts):
-    lmi = local_mass_integrand_jitted
+    lmi = local_mass_integrand
     return triangle_quadrature(verts, lmi)
-
 
 
 def local_stiffness_integrand(verts, p):
@@ -65,11 +60,8 @@ def local_stiffness_integrand(verts, p):
     return (grad_shape_eval@jac_inv@jac_inv.T@grad_shape_eval.T)*jnp.linalg.det(jac)
 
 
-local_stiffness_integrand_jitted = jax.jit(local_stiffness_integrand)
-
-
 def local_stiffness(verts):
-    lsi = local_stiffness_integrand_jitted
+    lsi = local_stiffness_integrand
     return triangle_quadrature(verts, lsi)
 
 
@@ -78,7 +70,8 @@ local_stiffness = jax.jit(local_stiffness)
 
 
 def test(n):
-    data = jnp.array([[[random(), random()],[random(), random()],[random(), random()]] for x in range(n)])
+    data = jnp.array([[[random(), random()], [random(), random()], [
+                     random(), random()]] for x in range(n)])
     print("Starting execution")
     t = monotonic()
     for d in data:
@@ -86,18 +79,22 @@ def test(n):
         local_stiffness(d)
     return monotonic() - t
 
+
 def test_vmap(n):
-    data = jnp.array([[[random(), random()],[random(), random()],[random(), random()]] for x in range(n)])
+    data = jnp.array([[[random(), random()], [random(), random()], [
+                     random(), random()]] for x in range(n)])
     print("Starting execution")
     t = monotonic()
+
     def execute(d):
         local_mass(d)
-        local_stiffness(d)    
+        local_stiffness(d)
     jax.vmap(execute)(data)
     return monotonic() - t
 
+
 if __name__ == "__main__":
-    n = 100_000
+    n = 5_000_000
     delta = test_vmap(n)
     print(f'Time taken to run {n} samples {delta}')
     print(f'Single run time {delta/n}')
