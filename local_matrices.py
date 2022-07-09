@@ -77,13 +77,25 @@ local_stiffness = jax.jit(local_stiffness)
 
 def test(n):
     data = jnp.array([[[random(), random()],[random(), random()],[random(), random()]] for x in range(n)])
+    print("Starting execution")
     t = monotonic()
     for d in data:
         local_mass(d)
         local_stiffness(d)
     return monotonic() - t
 
+def test_vmap(n):
+    data = jnp.array([[[random(), random()],[random(), random()],[random(), random()]] for x in range(n)])
+    print("Starting execution")
+    t = monotonic()
+    def execute(d):
+        local_mass(d)
+        local_stiffness(d)    
+    jax.vmap(execute)(data)
+    return monotonic() - t
+
 if __name__ == "__main__":
-    n = 100_000
-    delta = test(n)
+    n = 5_000_000
+    delta = test_vmap(n)
     print(f'Time taken to run {n} samples {delta}')
+    print(f'Single run time {delta/n}')
