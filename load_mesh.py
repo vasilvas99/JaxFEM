@@ -5,20 +5,37 @@ from pathlib import Path
 
 from yaml import parse
 
+
 def load_mesh_json(file_path: Path):
     with open(file_path) as f:
         return json.load(f)
-    
+
+
 def parse_json(json_dict):
-    nodes = jnp.array(json_dict["nodes"])    
+    nodes = jnp.array(json_dict["nodes"])
     elements = jnp.array(json_dict["elements"])
     dirichlet_nodes = jnp.array(json_dict["dirichletboundary"])
 
-    #TODO: convert elements and dirichlet nodes to 0-based
+    # convert elements and dirichlet nodes to 0-based
+    nodes = jax.vmap(lambda triangle: jnp.array(
+        [coord - 1 for coord in triangle]))(nodes)
+    dirichlet_nodes = jax.vmap(lambda dnode: dnode - 1)(dirichlet_nodes)
 
-    elements_coords = jax.vmap(lambda element: jnp.array([nodes[node_idx] for node_idx in element]))(elements)
-    
-    
+    # pre-calculate elements coordinates
+    # uses more memory but saves on trashing during assembly
+    elements_coords = jax.vmap(lambda element: jnp.array(
+        [nodes[node_idx] for node_idx in element]))(elements)
+
+    return {
+        "nodes": nodes,
+        "elements": elements,
+        "elements_coords": elements_coords,
+        "dirichlet_nodes": dirichlet_nodes
+    }
+
+
 if __name__ == "__main__":
     mesh_dict = load_mesh_json(Path("./test_mesh.json"))
-    parse_json(mesh_dict)
+    parsed_mesh = parse_json(mesh_dict)
+    print(parsed_mesh["elements"][0])
+    print(parsed_mesh["elements_coords"][0])
