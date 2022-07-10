@@ -38,7 +38,7 @@ def assemble_global_vector(mesh: mload.Mesh, local_vector):
 
 def main():
     from pathlib import Path
-    mesh_dict = mload.load_mesh_json(Path("./test_mesh.json"))
+    mesh_dict = mload.load_mesh_json(Path("./FEMcommon/test_mesh.json"))
     parsed_mesh = mload.parse_json(mesh_dict)
     gmass = assemble_global_matrix(parsed_mesh, local_mass)
     gvec = assemble_global_vector(parsed_mesh, local_vector)

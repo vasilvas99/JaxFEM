@@ -45,7 +45,7 @@ def parse_json(json_dict):
 
 
 def main():
-    mesh_dict = load_mesh_json(Path("./test_mesh.json"))
+    mesh_dict = load_mesh_json(Path("./FEMcommon/test_mesh.json"))
     parsed_mesh = parse_json(mesh_dict)
 
 
