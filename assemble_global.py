@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import jax
 import load_mesh as mload
 import numpy as np

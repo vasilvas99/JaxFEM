@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 from random import random
 import jax
 import jax.numpy as jnp
@@ -79,6 +80,7 @@ local_mass = jax.jit(local_mass)
 local_stiffness = jax.jit(local_stiffness)
 local_vector = jax.jit(local_vector)
 
+
 def test(n):
     from time import monotonic
     data = jnp.array([[[random(), random()], [random(), random()], [
@@ -110,6 +112,7 @@ def main():
     delta = test_vmap(n)
     print(f'Time taken to run {n} samples {delta}')
     print(f'Single run time {delta/n}')
+
 
 if __name__ == "__main__":
     main()

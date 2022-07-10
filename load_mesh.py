@@ -1,8 +1,12 @@
+#!/usr/bin/python3
+
+
 import jax
 import jax.numpy as jnp
 import json
 from pathlib import Path
 from dataclasses import dataclass
+
 
 @dataclass
 class Mesh:
@@ -39,9 +43,11 @@ def parse_json(json_dict):
         dirichlet_nodes
     )
 
-def main(): 
+
+def main():
     mesh_dict = load_mesh_json(Path("./test_mesh.json"))
-    parsed_mesh = parse_json(mesh_dict) 
+    parsed_mesh = parse_json(mesh_dict)
+
 
 if __name__ == "__main__":
     main()
