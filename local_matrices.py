@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 from random import random
-from time import monotonic
 import jax
 import jax.numpy as jnp
 
@@ -65,11 +64,23 @@ def local_stiffness(verts):
     return triangle_quadrature(verts, lsi)
 
 
+def local_vector_integrand(verts, p):
+    f_eval = jnp.array(list(map(lambda f: f(p), shapes)))
+    jac = real_coords_jac(verts, p)
+    return f_eval*jnp.linalg.det(jac)
+
+
+def local_vector(verts):
+    lvi = local_vector_integrand
+    return triangle_quadrature(verts, lvi)
+
+
 local_mass = jax.jit(local_mass)
 local_stiffness = jax.jit(local_stiffness)
-
+local_vector = jax.jit(local_vector)
 
 def test(n):
+    from time import monotonic
     data = jnp.array([[[random(), random()], [random(), random()], [
                      random(), random()]] for x in range(n)])
     print("Starting execution")
@@ -81,6 +92,7 @@ def test(n):
 
 
 def test_vmap(n):
+    from time import monotonic
     data = jnp.array([[[random(), random()], [random(), random()], [
                      random(), random()]] for x in range(n)])
     print("Starting execution")
@@ -93,8 +105,11 @@ def test_vmap(n):
     return monotonic() - t
 
 
-if __name__ == "__main__":
+def main():
     n = 5_000_000
     delta = test_vmap(n)
     print(f'Time taken to run {n} samples {delta}')
     print(f'Single run time {delta/n}')
+
+if __name__ == "__main__":
+    main()

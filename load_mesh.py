@@ -1,10 +1,8 @@
-from dataclasses import dataclass
 import jax
 import jax.numpy as jnp
 import json
 from pathlib import Path
 from dataclasses import dataclass
-
 
 @dataclass
 class Mesh:
@@ -25,8 +23,8 @@ def parse_json(json_dict):
     dirichlet_nodes = jnp.array(json_dict["dirichletboundary"])
 
     # convert elements and dirichlet nodes to 0-based
-    nodes = jax.vmap(lambda triangle: jnp.array(
-        [coord - 1 for coord in triangle]))(nodes)
+    elements = jax.vmap(lambda element: jnp.array(
+        [coord - 1 for coord in element]))(elements)
     dirichlet_nodes = jax.vmap(lambda dnode: dnode - 1)(dirichlet_nodes)
 
     # pre-calculate elements coordinates
@@ -41,9 +39,9 @@ def parse_json(json_dict):
         dirichlet_nodes
     )
 
+def main(): 
+    mesh_dict = load_mesh_json(Path("./test_mesh.json"))
+    parsed_mesh = parse_json(mesh_dict) 
 
 if __name__ == "__main__":
-    mesh_dict = load_mesh_json(Path("./test_mesh.json"))
-    parsed_mesh = parse_json(mesh_dict)
-    print(parsed_mesh.elements[0])
-    print(parsed_mesh.elements_coords[0])
+    main()
