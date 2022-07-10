@@ -1,9 +1,17 @@
+from dataclasses import dataclass
 import jax
 import jax.numpy as jnp
 import json
 from pathlib import Path
+from dataclasses import dataclass
 
-from yaml import parse
+
+@dataclass
+class Mesh:
+    nodes: jnp.ndarray
+    elements: jnp.ndarray
+    elements_coords: jnp.ndarray
+    dirichlet_nodes: jnp.ndarray
 
 
 def load_mesh_json(file_path: Path):
@@ -26,16 +34,16 @@ def parse_json(json_dict):
     elements_coords = jax.vmap(lambda element: jnp.array(
         [nodes[node_idx] for node_idx in element]))(elements)
 
-    return {
-        "nodes": nodes,
-        "elements": elements,
-        "elements_coords": elements_coords,
-        "dirichlet_nodes": dirichlet_nodes
-    }
+    return Mesh(
+        nodes,
+        elements,
+        elements_coords,
+        dirichlet_nodes
+    )
 
 
 if __name__ == "__main__":
     mesh_dict = load_mesh_json(Path("./test_mesh.json"))
     parsed_mesh = parse_json(mesh_dict)
-    print(parsed_mesh["elements"][0])
-    print(parsed_mesh["elements_coords"][0])
+    print(parsed_mesh.elements[0])
+    print(parsed_mesh.elements_coords[0])
