@@ -1,7 +1,3 @@
-import sys
-
-sys.path.append("FEMcommon")
-
 import jax.numpy as jnp
 import FEMcommon.load_mesh as mload
 from FEMcommon.local_matrices import local_stiffness, local_vector

@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 import jax
-import load_mesh as mload
+import FEMcommon.load_mesh as mload
 import numpy as np
-from local_matrices import local_mass, local_vector
+from FEMcommon.local_matrices import local_mass, local_vector
 
 
 def calculate_local_matrices(mesh: mload.Mesh, local_matrix):
