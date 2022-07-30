@@ -3,8 +3,9 @@ from pathlib import Path
 import jax.numpy as jnp
 import jax
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import numpy as onp
-import scipy.integrate as ode
+
 
 import FEMcommon.load_mesh as mload
 from FEMcommon.local_matrices import local_stiffness, local_vector, local_mass
@@ -37,15 +38,13 @@ def solve(Tmax, mesh: mload.Mesh):
     stiffness = calculate_stiffness_matrix(mesh)
     system_mtx = - jnp.linalg.inv(mass) @ stiffness
 
-    # # move to the cpu
-    # q0 = onp.array(q0)
-    # system_mtx = onp.array(system_mtx)
     print("Matrix calculations done, moving onto solving ODE")
 
     def rhs(t, q):
-        return system_mtx.dot(q)
+        return system_mtx@q
 
-    solution = ode.solve_ivp(rhs, [0, Tmax], q0)
+    ode_p = helpers.ODEProblem(0, Tmax, rhs, q0)
+    solution = helpers.explicit_euler(ode_p, 0.005)
     print("ODE solution done")
     return solution
 
@@ -60,11 +59,27 @@ def plot(mesh, values):
     plt.show()
 
 
+def animate_plot(mesh, solution):
+    xs = mesh.nodes[:, 0]
+    ys = mesh.nodes[:, 1]
+    
+    ax = plt.axes(projection='3d')
+    ax.set_zlim(0,100)
+    ax.plot_trisurf(xs, ys, zs, linewidth=0.1, antialiased=True)
+
+    def update_plot(frame_number, zarray, plot):
+        plot[0].remove()
+        plot[0] = ax.plot_trisurf(xs, ys, zarray[:,:,frame_number], linewidth=0.1, antialiased=True)
+
+    ani = animation.FuncAnimation(fig, update_plot, frn, fargs=(zarray, plot), interval=1000/fps)
+
+        
+
 def main():
     mesh_json = mload.load_mesh_json(Path("./circle_coarse_mesh.json"))
     mesh = mload.parse_json(mesh_json)
     q0 = initial_cond(mesh)
-    sol = solve(10, mesh)
+    sol = solve(1, mesh)
     plot(mesh, sol.y[-1])
 
 
