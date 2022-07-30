@@ -17,7 +17,7 @@ def s3(p):
     return p[1]
 
 
-shapes = [jax.jit(s1), jax.jit(s2), jax.jit(s3)]
+shapes = [s1, s2, s3]
 grad_shapes = [jax.grad(shape) for shape in shapes]
 
 
@@ -35,12 +35,11 @@ real_coords_jac = jax.jacfwd(real_coords, argnums=1)
 
 
 def triangle_quadrature(verts, integrand):
-    weights = jnp.array([1/6, 1/6, 1/6])
-    nodes = jnp.array([[1/2, 0], [1/2, 1/2], [0, 1/2]])
-    integral = weights[0]*integrand(verts, nodes[0])
-    for idx, node in enumerate(nodes[1:]):
-        integral += weights[idx]*integrand(verts, node)
-    return integral
+    quadrature_weights = jnp.array([1/6, 1/6, 1/6])
+    quadrature_nodes = jnp.array([[1/2, 0], [1/2, 1/2], [0, 1/2]])
+
+    vals_at_nodes = jax.vmap(lambda node: integrand(verts, node))(quadrature_nodes)
+    return quadrature_weights*vals_at_nodes.sum(0)
 
 
 def local_mass_integrand(verts, p):
