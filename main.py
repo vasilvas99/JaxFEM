@@ -28,7 +28,7 @@ def plot(mesh, values):
     ys = mesh.nodes[:, 1]
     zs = values
     ax = plt.axes(projection='3d')
-    ax.plot_trisurf(xs, ys, zs, linewidth=0.2, antialiased=True)
+    ax.plot_trisurf(xs, ys, zs, linewidth=0.1, antialiased=True)
     plt.savefig("plot.png", dpi=1200)
     plt.show()
 
