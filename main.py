@@ -28,11 +28,12 @@ def plot(mesh, values):
     ys = mesh.nodes[:, 1]
     zs = values
     ax = plt.axes(projection='3d')
-    ax.scatter(xs, ys, zs, 'green')
+    ax.plot_trisurf(xs, ys, zs, linewidth=0.2, antialiased=True)
     plt.savefig("plot.png", dpi=1200)
+    plt.show()
 
 def main():
-    mesh_json = mload.load_mesh_json(Path("./circle_fine_mesh.json"))
+    mesh_json = mload.load_mesh_json(Path("./circle_coarse_mesh.json"))
     mesh = mload.parse_json(mesh_json)
     gstiffness = calculate_stiffness_matrix(mesh)
     gvect = calculate_load_vector(mesh)

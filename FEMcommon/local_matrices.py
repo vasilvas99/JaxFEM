@@ -38,7 +38,8 @@ def triangle_quadrature(verts, integrand):
     quadrature_weights = jnp.array([1/6, 1/6, 1/6])
     quadrature_nodes = jnp.array([[1/2, 0], [1/2, 1/2], [0, 1/2]])
 
-    vals_at_nodes = jax.vmap(lambda node: integrand(verts, node))(quadrature_nodes)
+    vals_at_nodes = jax.vmap(
+        lambda node: integrand(verts, node))(quadrature_nodes)
     return quadrature_weights*vals_at_nodes.sum(0)
 
 
