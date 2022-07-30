@@ -11,6 +11,7 @@ def calculate_local_matrices(mesh: mload.Mesh, local_matrix):
 
 
 def assemble_global_matrix(mesh: mload.Mesh, local_matrix):
+    #TODO: figure out how to compile loop body with jax
     n = mesh.nodes.shape[0]
     global_mtx = onp.zeros((n, n))
     local_matrices = calculate_local_matrices(mesh, local_matrix)
@@ -23,8 +24,9 @@ def assemble_global_matrix(mesh: mload.Mesh, local_matrix):
                 global_mtx[elements[idx, i], elements[idx, j]] += lm[i, j]
     return global_mtx
 
-
 def assemble_global_vector(mesh: mload.Mesh, local_vector):
+    #TODO: figure out how to compile loop body with jax
+
     n = mesh.nodes.shape[0]
     global_vector = onp.zeros(n)
     local_vectors = calculate_local_matrices(mesh, local_vector)

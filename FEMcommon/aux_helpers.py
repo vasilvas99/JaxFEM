@@ -16,18 +16,18 @@ class ODEProblem:
     f: Callable
     y0: onp.ndarray
 
-def concentrate_mass_matrix(global_mass):
-    return jnp.diag(global_mass.sum(1))
-
 def explicit_euler(problem: ODEProblem, step):
     t = onp.arange(problem.t0, problem.Tmax, step)
     n = t.shape[0]
     y = onp.array(onp.repeat(problem.y0[None,:], n, axis=0))
-
+    #TODO: figure out how to compile loop body with jax
     for i in range(1, n-1):
         y[i+1] = y[i] + step*problem.f(t, y[i])
 
     return ODESolution(t, y)
+
+def concentrate_mass_matrix(global_mass):
+    return jnp.diag(global_mass.sum(1))
 
 def main():
     test_mtx = jnp.array([[1,5,9],[3,8,1]])

@@ -60,6 +60,7 @@ def plot(mesh, values):
 
 
 def animate_plot(mesh, solution):
+    #TODO: figure this out
     xs = mesh.nodes[:, 0]
     ys = mesh.nodes[:, 1]
     
@@ -69,7 +70,7 @@ def animate_plot(mesh, solution):
 
     def update_plot(frame_number, zarray, plot):
         plot[0].remove()
-        plot[0] = ax.plot_trisurf(xs, ys, zarray[:,:,frame_number], linewidth=0.1, antialiased=True)
+        plot[0] = ax.plot_trisurf(xs, ys, zarray[frame_number], linewidth=0.1, antialiased=True)
 
     ani = animation.FuncAnimation(fig, update_plot, frn, fargs=(zarray, plot), interval=1000/fps)
 
@@ -79,8 +80,8 @@ def main():
     mesh_json = mload.load_mesh_json(Path("./circle_coarse_mesh.json"))
     mesh = mload.parse_json(mesh_json)
     q0 = initial_cond(mesh)
-    sol = solve(1, mesh)
-    plot(mesh, sol.y[-1])
+    sol = solve(10, mesh)
+    plot(mesh, sol.y[21])
 
 
 
