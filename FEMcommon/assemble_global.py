@@ -2,7 +2,7 @@
 
 import jax
 import FEMcommon.load_mesh as mload
-import numpy as np
+import numpy as onp
 from FEMcommon.local_matrices import local_mass, local_vector
 
 
@@ -12,7 +12,7 @@ def calculate_local_matrices(mesh: mload.Mesh, local_matrix):
 
 def assemble_global_matrix(mesh: mload.Mesh, local_matrix):
     n = mesh.nodes.shape[0]
-    global_mtx = np.zeros((n, n))
+    global_mtx = onp.zeros((n, n))
     local_matrices = calculate_local_matrices(mesh, local_matrix)
 
     for idx, lm in enumerate(local_matrices):
@@ -26,7 +26,7 @@ def assemble_global_matrix(mesh: mload.Mesh, local_matrix):
 
 def assemble_global_vector(mesh: mload.Mesh, local_vector):
     n = mesh.nodes.shape[0]
-    global_vector = np.zeros(n)
+    global_vector = onp.zeros(n)
     local_vectors = calculate_local_matrices(mesh, local_vector)
     for idx, lv in enumerate(local_vectors):
         m = lv.shape[0]
