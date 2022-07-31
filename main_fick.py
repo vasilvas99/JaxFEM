@@ -76,8 +76,8 @@ def main():
     mesh = mload.parse_json(mesh_json)
     q0 = initial_cond(mesh)
     sol = solve(10, mesh)
+    print(f'Final system state: {sol.y[-1]}')
     animate_plot(mesh, sol)
-
 
 
 if __name__ == "__main__":
