@@ -44,7 +44,7 @@ def solve(Tmax, mesh: mload.Mesh):
         return system_mtx@q
 
     ode_p = helpers.ODEProblem(0, Tmax, rhs, q0)
-    solution = helpers.explicit_euler(ode_p, 0.005)
+    solution = helpers.explicit_euler(ode_p, 0.0001)
     print("ODE solution done")
     return solution
 
@@ -72,7 +72,7 @@ def animate_plot(mesh, solution):
         
 
 def main():
-    mesh_json = mload.load_mesh_json(Path("./circle_coarse_mesh.json"))
+    mesh_json = mload.load_mesh_json(Path("./circle_fine_mesh.json"))
     mesh = mload.parse_json(mesh_json)
     q0 = initial_cond(mesh)
     sol = solve(10, mesh)
