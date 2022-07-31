@@ -48,31 +48,26 @@ def solve(Tmax, mesh: mload.Mesh):
     print("ODE solution done")
     return solution
 
-
-def plot(mesh, values):
-    xs = mesh.nodes[:, 0]
-    ys = mesh.nodes[:, 1]
-    zs = values
-    ax = plt.axes(projection='3d')
-    ax.set_zlim(0,100)
-    ax.plot_trisurf(xs, ys, zs, linewidth=0.1, antialiased=True)
-    plt.show()
-
-
 def animate_plot(mesh, solution):
-    #TODO: figure this out
+    #TODO: probably add animation controls
     xs = mesh.nodes[:, 0]
     ys = mesh.nodes[:, 1]
-    
-    ax = plt.axes(projection='3d')
-    ax.set_zlim(0,100)
-    ax.plot_trisurf(xs, ys, zs, linewidth=0.1, antialiased=True)
 
-    def update_plot(frame_number, zarray, plot):
-        plot[0].remove()
-        plot[0] = ax.plot_trisurf(xs, ys, zarray[frame_number], linewidth=0.1, antialiased=True)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    #plot first frame
+    line = ax.plot_trisurf(xs, ys, solution.y[0],color= 'b')
+    def data(i, line):
+        #for every frame subsequent frame, clear the axes and re-plot
+        zs = solution.y[i]
+        ax.clear()
+        ax.set_zlim(0, 100)
+        line = ax.plot_trisurf(xs, ys, zs, linewidth=0.1, antialiased=True)
+        return line
 
-    ani = animation.FuncAnimation(fig, update_plot, frn, fargs=(zarray, plot), interval=1000/fps)
+    ani = animation.FuncAnimation(fig, data, fargs=(line,), interval=120, blit=False)
+    ani.save('fick_law_animation.gif',writer='imagemagick',fps=5)
+    plt.show()
 
         
 
@@ -81,7 +76,7 @@ def main():
     mesh = mload.parse_json(mesh_json)
     q0 = initial_cond(mesh)
     sol = solve(10, mesh)
-    plot(mesh, sol.y[21])
+    animate_plot(mesh, sol)
 
 
 
