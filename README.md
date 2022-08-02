@@ -1,6 +1,9 @@
 # JaxFEM
 
 An exercise to implement a FEM solver using python and JAX
+Jaxlib only works under Linux so this whole software is only usable under Linux-based operating systems.
+Some functions are written in Rust for better performance but are kept in another repo. Run the setup_environment.py script
+first to ensure your enviroment has all the necessary requirements.
 
 ## Poisson equation
 
