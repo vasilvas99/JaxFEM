@@ -2,6 +2,9 @@ from pathlib import Path
 
 import jax.numpy as jnp
 import jax
+from jax.config import config
+config.update("jax_enable_x64", True)
+
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as onp
@@ -38,8 +41,7 @@ def solve(Tmax, mesh: mload.Mesh):
     stiffness = calculate_stiffness_matrix(mesh)
     system_mtx = - jnp.linalg.inv(mass) @ stiffness
 
-    print("Matrix calculations done, moving onto solving ODE")
-
+    # System mtx is assembled correctly. The ode solver should be the problem then ...
     def rhs(t, q):
         return system_mtx@q
 
@@ -72,7 +74,7 @@ def animate_plot(mesh, solution):
         
 
 def main():
-    mesh_json = mload.load_mesh_json(Path("./circle_fine_mesh.json"))
+    mesh_json = mload.load_mesh_json(Path("./test_meshes/regular_mesh.json"))
     mesh = mload.parse_json(mesh_json)
     q0 = initial_cond(mesh)
     sol = solve(10, mesh)
