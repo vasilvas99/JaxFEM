@@ -36,7 +36,7 @@ def plot(mesh, values):
     zs = values
     ax = plt.axes(projection='3d')
     ax.plot_trisurf(xs, ys, zs, linewidth=0.1, antialiased=True)
-    plt.savefig("plot.png", dpi=1200)
+    plt.savefig("./results/plot_poisson.png", dpi=1200)
     plt.show()
 
 def main():
