@@ -4,6 +4,7 @@ import numpy as onp
 from dataclasses import dataclass
 from typing import Callable
 import scipy.integrate
+
 @dataclass
 class ODESolution:
     t: onp.ndarray
