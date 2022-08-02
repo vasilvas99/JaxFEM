@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 import FEMcommon.aux_helpers as helpers
 from FEMcommon.assemble_global import assemble_global_matrix, assemble_global_vector
-from FEMcommon.local_matrices import local_stiffness, local_vector, local_mass
+from FEMcommon.local_matrices import local_stiffness, local_mass
 import FEMcommon.load_mesh as mload
 
 
