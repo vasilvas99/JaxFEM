@@ -3,7 +3,6 @@ import jax.numpy as jnp
 import numpy as onp
 from dataclasses import dataclass
 from typing import Callable
-import scipy.integrate
 
 @dataclass
 class ODESolution:
@@ -27,10 +26,6 @@ def explicit_euler(problem: ODEProblem, step):
         y.append(y[i] + step*problem.f(t[i], y[i]))
 
     return ODESolution(t, onp.array(y))
-
-def scipy_ivp(problem: ODEProblem):
-    sol = scipy.integrate.solve_ivp(problem.f, (problem.t0, problem.Tmax), problem.y0)
-    return ODESolution(sol.t, sol.y)
 
 def concentrate_mass_matrix(global_mass):
     return jnp.diag(global_mass.sum(1))
