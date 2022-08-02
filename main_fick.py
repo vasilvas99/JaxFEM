@@ -72,7 +72,7 @@ def animate_plot(mesh, solution):
         return line
 
     ani = animation.FuncAnimation(
-        fig, data, fargs=(line,),blit=False)
+        fig, data, fargs=(line,), interval = 200, blit=False)
     print("Animation prepared. Rendering gif.")
     ani.save('./results/fick_law_animation.gif', writer='imagemagick', fps=5)
     print("Gif saved as: fick_law_animation.gif. Showing matplotlib interface.")
@@ -82,7 +82,7 @@ def animate_plot(mesh, solution):
 def main():
     mesh_json = mload.load_mesh_json(Path("./test_meshes/circle_fine_mesh.json"))
     mesh = mload.parse_json(mesh_json)
-    sol = solve(initial_temp=70, hot_radius=0.4, Tmax=10, timestep=0.1, mesh=mesh)
+    sol = solve(initial_temp=70, hot_radius=0.4, Tmax=4, timestep=0.01, mesh=mesh)
     animate_plot(mesh, sol)
 
 
