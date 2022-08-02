@@ -5,6 +5,7 @@ import jax.numpy as jnp
 import jax
 from jax.config import config
 config.update("jax_enable_x64", True)
+jax.config.update('jax_platform_name', 'cpu')
 
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
@@ -73,15 +74,15 @@ def animate_plot(mesh, solution):
     ani = animation.FuncAnimation(
         fig, data, fargs=(line,),blit=False)
     print("Animation prepared. Rendering gif.")
-    ani.save('fick_law_animation.gif', writer='imagemagick', fps=5)
+    ani.save('fick_law_animation.gif', writer='imagemagick', fps=400)
     print("Gif saved as: fick_law_animation.gif. Showing matplotlib interface.")
     plt.show()
 
 
 def main():
-    mesh_json = mload.load_mesh_json(Path("./test_meshes/regular_mesh.json"))
+    mesh_json = mload.load_mesh_json(Path("./test_meshes/circle_fine_mesh.json"))
     mesh = mload.parse_json(mesh_json)
-    sol = solve(initial_temp=70, hot_radius=0.4, Tmax=10, timestep=0.001, mesh=mesh)
+    sol = solve(initial_temp=70, hot_radius=0.4, Tmax=20, timestep=0.0001, mesh=mesh)
     animate_plot(mesh, sol)
 
 

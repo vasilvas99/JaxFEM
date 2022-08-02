@@ -1,9 +1,16 @@
+import jax
 import jax.numpy as jnp
+from jax.config import config
+config.update("jax_enable_x64", True)
+jax.config.update('jax_platform_name', 'cpu')
+
+import matplotlib.pyplot as plt
+
 import FEMcommon.load_mesh as mload
 from FEMcommon.local_matrices import local_stiffness, local_vector
 from FEMcommon.assemble_global import assemble_global_matrix, assemble_global_vector
 from pathlib import Path
-import matplotlib.pyplot as plt
+
 
 
 def calculate_stiffness_matrix(mesh: mload.Mesh):
@@ -33,7 +40,7 @@ def plot(mesh, values):
     plt.show()
 
 def main():
-    mesh_json = mload.load_mesh_json(Path("./test_meshes/circle_coarse_mesh.json"))
+    mesh_json = mload.load_mesh_json(Path("./test_meshes/circle_fine_mesh.json"))
     mesh = mload.parse_json(mesh_json)
     gstiffness = calculate_stiffness_matrix(mesh)
     gvect = calculate_load_vector(mesh)

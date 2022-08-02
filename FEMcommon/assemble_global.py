@@ -4,24 +4,17 @@ import jax
 import FEMcommon.load_mesh as mload
 import numpy as onp
 from FEMcommon.local_matrices import local_mass, local_vector
-
+import FEMcommon.fem_toolkit as rust_toolkit
 
 def calculate_local_matrices(mesh: mload.Mesh, local_matrix):
     return jax.vmap(lambda element: local_matrix(element))(mesh.elements_coords)
 
 
 def assemble_global_matrix(mesh: mload.Mesh, local_matrix):
-    #TODO: figure out how to compile loop body with jax
     n = mesh.nodes.shape[0]
     global_mtx = onp.zeros((n, n))
     local_matrices = calculate_local_matrices(mesh, local_matrix)
-
-    for idx, lm in enumerate(local_matrices):
-        m = lm.shape[0]
-        elements = mesh.elements
-        for i in range(m):
-            for j in range(m):
-                global_mtx[elements[idx, i], elements[idx, j]] += lm[i, j]
+    global_mtx = rust_toolkit.assemble_global_matrix(onp.array(global_mtx), onp.array(local_matrices), onp.array(mesh.elements))
     return global_mtx
 
 def assemble_global_vector(mesh: mload.Mesh, local_vector):
@@ -30,12 +23,9 @@ def assemble_global_vector(mesh: mload.Mesh, local_vector):
     n = mesh.nodes.shape[0]
     global_vector = onp.zeros(n)
     local_vectors = calculate_local_matrices(mesh, local_vector)
-    for idx, lv in enumerate(local_vectors):
-        m = lv.shape[0]
-        elements = mesh.elements
-        for i in range(m):
-            global_vector[elements[idx, i]] += lv[i]
+    global_vector = rust_toolkit.assemble_global_vector(global_vector, onp.array(local_vectors), onp.array(mesh.elements))
     return global_vector
+
 
 
 def main():
