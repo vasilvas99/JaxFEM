@@ -4,8 +4,8 @@ from time import monotonic
 import jax.numpy as jnp
 import jax
 from jax.config import config
-# config.update("jax_enable_x64", True)
-# jax.config.update('jax_platform_name', 'cpu')
+config.update("jax_enable_x64", True)
+jax.config.update('jax_platform_name', 'cpu')
 
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
@@ -47,7 +47,7 @@ def solve(initial_temp, hot_radius, Tmax, timestep, mesh: mload.Mesh):
         return system_mtx@q
 
     ode_p = helpers.ODEProblem(0, Tmax, rhs, q0)
-    solution = helpers.explicit_euler(ode_p, timestep)
+    solution = helpers.implicit_euler(ode_p, timestep)
     print(f"ODE solution done in {monotonic()-t0}s.")
     return solution
 
@@ -74,7 +74,7 @@ def animate_plot(mesh, solution):
     ani = animation.FuncAnimation(
         fig, data, fargs=(line,),blit=False)
     print("Animation prepared. Rendering gif.")
-    ani.save('./results/fick_law_animation.gif', writer='imagemagick', fps=400)
+    ani.save('./results/fick_law_animation.gif', writer='imagemagick', fps=5)
     print("Gif saved as: fick_law_animation.gif. Showing matplotlib interface.")
     plt.show()
 
@@ -82,7 +82,7 @@ def animate_plot(mesh, solution):
 def main():
     mesh_json = mload.load_mesh_json(Path("./test_meshes/circle_fine_mesh.json"))
     mesh = mload.parse_json(mesh_json)
-    sol = solve(initial_temp=70, hot_radius=0.4, Tmax=3, timestep=0.0001, mesh=mesh)
+    sol = solve(initial_temp=70, hot_radius=0.4, Tmax=10, timestep=0.1, mesh=mesh)
     animate_plot(mesh, sol)
 
 
