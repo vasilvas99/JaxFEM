@@ -40,9 +40,14 @@ def solve(Tmax, mesh: mload.Mesh):
     mass = calculate_mass_matrix(mesh)
     stiffness = calculate_stiffness_matrix(mesh)
     system_mtx = - jnp.linalg.inv(mass) @ stiffness
+    system_mtx = onp.array(system_mtx)
 
     # System mtx is assembled correctly. The ode solver should be the problem then ...
     def rhs(t, q):
+        # print(f'{q=}')
+        # print(f'{q.shape}')
+        # print(f'{system_mtx.shape}')
+        # exit(-1)
         return system_mtx@q
 
     ode_p = helpers.ODEProblem(0, Tmax, rhs, q0)
