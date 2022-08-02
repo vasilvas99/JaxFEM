@@ -33,7 +33,7 @@ def plot(mesh, values):
     plt.show()
 
 def main():
-    mesh_json = mload.load_mesh_json(Path("./circle_coarse_mesh.json"))
+    mesh_json = mload.load_mesh_json(Path("./test_meshes/circle_coarse_mesh.json"))
     mesh = mload.parse_json(mesh_json)
     gstiffness = calculate_stiffness_matrix(mesh)
     gvect = calculate_load_vector(mesh)
