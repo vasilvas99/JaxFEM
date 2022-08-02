@@ -1,8 +1,8 @@
 import jax
 import jax.numpy as jnp
 from jax.config import config
-config.update("jax_enable_x64", True)
-jax.config.update('jax_platform_name', 'cpu')
+# config.update("jax_enable_x64", True)
+# jax.config.update('jax_platform_name', 'cpu')
 
 import matplotlib.pyplot as plt
 
