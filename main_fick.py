@@ -59,16 +59,16 @@ def animate_plot(mesh, solution):
     ys = mesh.nodes[:, 1]
 
     fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    ax = fig.add_subplot(111)
+    ax.set_aspect(aspect=1)
     # plot first frame
-    line = ax.plot_trisurf(xs, ys, solution.y[0], color='b')
-
+    line = ax.tripcolor(xs, ys, solution.y[0], vmin = 0, vmax = 200)
     def data(i, line):
         # for every frame subsequent frame, clear the axes and re-plot
         zs = solution.y[i]
         ax.clear()
-        ax.set_zlim(0, 100)
-        line = ax.plot_trisurf(xs, ys, zs, linewidth=0.1, antialiased=True)
+        ax.set_aspect(aspect=1)
+        line = ax.tripcolor(xs, ys, zs, vmin = 0, vmax = 200)
         return line
 
     ani = animation.FuncAnimation(
@@ -82,7 +82,7 @@ def animate_plot(mesh, solution):
 def main():
     mesh_json = mload.load_mesh_json(Path("./test_meshes/circle_fine_mesh.json"))
     mesh = mload.parse_json(mesh_json)
-    sol = solve(initial_temp=70, hot_radius=0.4, Tmax=4, timestep=0.01, mesh=mesh)
+    sol = solve(initial_temp=400, hot_radius=0.7, Tmax=2, timestep=0.005, mesh=mesh)
     animate_plot(mesh, sol)
 
 
