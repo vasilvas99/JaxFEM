@@ -23,7 +23,7 @@ $$
 C^\kappa = \iint_\kappa \Phi^T (\bar{b}\nabla \Phi)  d\kappa
 $$
 
-Where $\Phi = (\phi_1, \phi_2, ...) $ - row vector with the non-zero over $\kappa$ basis functions (from the global basis).
+Where $\Phi = (\phi_1, \phi_2, ...)$ - row vector with the non-zero over $\kappa$ basis functions (from the global basis).
 
 Changing to the standart element $E$ we obtain:
 
