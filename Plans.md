@@ -2,7 +2,7 @@
 
 ## Advection matrix:
 
-Let $ b = (b_1, b_2, b_3 ...)$ be a row-vector  (a vector valued function) represeting a fluid's velocity field.
+Let $b = (b_1, b_2, b_3 ...)$ be a row-vector  (a vector valued function) represeting a fluid's velocity field.
 Then, the local advection matrix can be written as (in index form):
 
 $$
