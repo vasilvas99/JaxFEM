@@ -31,6 +31,7 @@ except Exception as ex:
     
     if not GIT_INSTALLED:
         print("Please install git!")
+        exit(-1)
     
     if not CARGO_INSTALLED:
         print("Please install the Rust programming language toolchain by going to https://www.rust-lang.org/tools/install")
