@@ -26,6 +26,7 @@ C^\kappa = \iint_E \Psi^T (\bar{b} J ^{-1} \nabla \Psi) |J| dE
 $$
 
 Finally, for the local advection matrix we obtain:
+
 $$
 C^\kappa = |J| \iint_E \Psi^T b J ^{-1} \nabla \Psi dE
 $$
