@@ -4,19 +4,25 @@
 
 Let $ b = (b_1, b_2, b_3 ...)$ be a row-vector  (a vector valued function) represeting a fluid's velocity field.
 Then, the local advection matrix can be written as (in index form):
+
 $$
 C_{i, j}^\kappa = (\bar{b} \cdot \nabla \phi_j, \phi_i)_\kappa
 $$
+
 For the global basis. 
+
 Equivalently:
+
 $$
 C_{i, j}^\kappa = \iint_\kappa \bar{b} \cdot \nabla \phi_j \phi_i d\kappa
 $$
 
 In matrix form:
+
 $$
 C^\kappa = \iint_\kappa \Phi^T (\bar{b}\nabla \Phi)  d\kappa
 $$
+
 Where $\Phi = (\phi_1, \phi_2, ...) $ - row vector with the non-zero over $\kappa$ basis functions (from the global basis).
 
 Changing to the standart element $E$ we obtain:
