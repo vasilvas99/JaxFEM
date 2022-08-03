@@ -74,7 +74,7 @@ def animate_plot(mesh, solution):
     ani = animation.FuncAnimation(
         fig, data, fargs=(line,), interval = 200, blit=False)
     print("Animation prepared. Rendering gif.")
-    ani.save('./results/fick_law_animation.gif', writer='imagemagick', fps=5)
+    ani.save('./results/fick_law_animation.gif', fps=5, dpi=400)
     print("Gif saved as: fick_law_animation.gif. Showing matplotlib interface.")
     plt.show()
 

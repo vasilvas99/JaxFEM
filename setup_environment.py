@@ -9,6 +9,11 @@ if not IS_LINUX:
     print("JAX currently only works under Linux so this software is currently limited to be Linux only")
     exit(-1)
 
+setup_venv = input("Should I setup a venv for you? [y/N] ")
+if install_deps.lower() == "y":
+    
+
+
 install_deps = input("Should I run 'pip3 install -r requirements.txt' for you?\
  Accepting this is recommended only when working in a venv. \
 Otherwise the installation of these packages will be global! [y/N] ")
