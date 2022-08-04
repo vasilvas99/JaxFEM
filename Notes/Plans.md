@@ -56,3 +56,15 @@ $dim(\nabla \Psi) = (n , m)$ - matrix
 Therefore:
 
 $(m, 1) \times (1,n) \times (n,n) \times (n , m) \rightarrow (m, m)$
+
+### Tests
+
+Vector fields to test over the circle mesh:
+
+
+
+1. $\bar{f}(x,y) = (y-x, -x-y)$
+    ![Attractor](./images/attractor.png)
+
+2. $\bar{f}(x,y) = (y, -x)$
+    ![Spinner](./images/spinner.png)
