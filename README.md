@@ -20,8 +20,22 @@ Result is:
 
 `main_fick.py`  Solves the simplest form of the diffusion equation in 2D with homogenous Neumann b.c.
 
-$\frac{\partial u}{\partial t} + \nabla^2 u = 0$
+$\frac{\partial u}{\partial t} - \nabla^2 u = 0$
 
 Output is:
 
 ![Ficks law](./results/fick_law_animation.gif)
+
+
+## Advection-Diffusion
+
+This builds on the previous example by adding an advection term.
+
+`main_advection.py` is the solver for:
+
+$\frac{\partial u}{\partial t} + \bar{b} \cdot \nabla u - \nabla^2 u = 0$
+
+Where the particular choice for $\bar{b}$ simulates a fluid flow moving from the left to the right with a temperature of 0 degrees. Here the "dominant force" is the advection.
+
+Output:
+![Advection-Diffusion](./results/advection_diffusion.gif)
