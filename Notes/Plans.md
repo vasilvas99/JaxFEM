@@ -64,7 +64,9 @@ Vector fields to test over the circle mesh:
 
 
 1. $\bar{f}(x,y) = (y-x, -x-y)$
+
     ![Attractor](./images/attractor.png)
 
 2. $\bar{f}(x,y) = (y, -x)$
+
     ![Spinner](./images/spinner.png)
