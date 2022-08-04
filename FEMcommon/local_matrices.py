@@ -75,6 +75,18 @@ def local_vector(verts):
     lvi = local_vector_integrand
     return triangle_quadrature(verts, lvi)
 
+def spiral_vector_field_2D(point):
+    x, y  = point
+    return jnp.array([[y-x, -x-y]]) # row vector
+
+def local_advection_integrand(verts, p):
+    f_eval = jnp.array([list(map(lambda f: f(p), shapes))]).T
+    jac = real_coords_jac(verts, p).T
+    jac_inv = jnp.linalg.inv(jac)
+    b = spiral_vector_field_2D(real_coords(verts, p))
+    grad_shape_eval = jnp.array(list(map(lambda f: f(p), grad_shapes))).T
+ 
+    return (f_eval@b@jac_inv@grad_shape_eval)*jnp.linalg.det(jac)
 
 local_mass = jax.jit(local_mass)
 local_stiffness = jax.jit(local_stiffness)
@@ -107,6 +119,14 @@ def test_vmap(n):
     return monotonic() - t
 
 
+def test_advection():
+    v = jnp.array([[0,0],[1,0],[0,1]])
+    p = jnp.array([0.1,0.0])
+    print(spiral_vector_field_2D(real_coords(v, p)))
+    print(spiral_vector_field_2D(p))
+    print(f'{local_advection_integrand(v, p)=}')
+
+
 def main():
     n = 5_000_000
     delta = test_vmap(n)
@@ -115,4 +135,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    test_advection()
