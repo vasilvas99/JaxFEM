@@ -71,25 +71,29 @@ def local_vector_integrand(verts, p):
     return f_eval*jnp.linalg.det(jac)
 
 
-def local_vector(verts):
-    lvi = local_vector_integrand
-    return triangle_quadrature(verts, lvi)
+def right_flow_field_2D(point):
+    x, y = point
+    return 5*jnp.array([[1, -y]])  # row vector
 
-def right_vector_field_2D(point):
-    x, y  = point
-    return 20*jnp.array([[1, -y]]) # row vector
 
 def local_advection_integrand(verts, p):
     f_eval = jnp.array([list(map(lambda f: f(p), shapes))]).T
     jac = real_coords_jac(verts, p).T
     jac_inv = jnp.linalg.inv(jac)
-    b = right_vector_field_2D(real_coords(verts, p))
-    grad_shape_eval = jnp.array(list(map(lambda f: f(p), grad_shapes))).T 
+    b = right_flow_field_2D(real_coords(verts, p))
+    grad_shape_eval = jnp.array(list(map(lambda f: f(p), grad_shapes))).T
     return (f_eval@b@jac_inv@grad_shape_eval)*jnp.linalg.det(jac)
+
 
 def local_advection(verts):
     lai = local_advection_integrand
     return triangle_quadrature(verts, lai)
+
+
+def local_vector(verts):
+    lvi = local_vector_integrand
+    return triangle_quadrature(verts, lvi)
+
 
 local_mass = jax.jit(local_mass)
 local_stiffness = jax.jit(local_stiffness)
@@ -124,10 +128,10 @@ def test_vmap(n):
 
 
 def test_advection():
-    v = jnp.array([[0,0],[1,0],[0,1]])
-    p = jnp.array([0.1,0.0])
-    print(right_vector_field_2D(real_coords(v, p)))
-    print(right_vector_field_2D(p))
+    v = jnp.array([[0, 0], [1, 0], [0, 1]])
+    p = jnp.array([0.1, 0.0])
+    print(right_flow_field_2D(real_coords(v, p)))
+    print(right_flow_field_2D(p))
     print(f'{local_advection(v)=}')
 
 
