@@ -12,7 +12,6 @@ if not IS_LINUX:
 install_deps = input("Should I run 'pip3 install -r requirements.txt' for you?\
  Accepting this is recommended only when working in a venv. \
 Otherwise the installation of these packages will be global! [y/N] ")
-
 if install_deps.lower() == "y":
     subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"])
 
