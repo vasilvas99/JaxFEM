@@ -80,8 +80,8 @@ def animate_plot(mesh, solution):
     ani = animation.FuncAnimation(
         fig, data, fargs=(line,), blit=False)
     print("Animation prepared. Rendering gif.")
-    ani.save('./results/diffusion_advection_animation_adv.gif', fps=5, dpi=400)
-    print("Gif saved as: fick_law_animation.gif. Showing matplotlib interface.")
+    ani.save('./results/advection_diffusion.gif', fps=5, dpi=400)
+    print("Gif saved as: advection_diffusion.gif. Showing matplotlib interface.")
     plt.show()
 
 
@@ -91,8 +91,7 @@ def main():
     mesh = mload.parse_json(mesh_json)
     sol = solve(initial_temp=1000, hot_radius=0.2,
                 Tmax=1, timestep=0.01, mesh=mesh)
-    # print(sol.y.shape)
-    # print(sol.y[-1])
+
     animate_plot(mesh, sol)
 
 
