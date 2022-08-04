@@ -73,7 +73,7 @@ def local_vector_integrand(verts, p):
 
 def right_flow_field_2D(point):
     x, y = point
-    return 5*jnp.array([[1, -y]])  # row vector
+    return 2*jnp.array([[3, -1.5*y]])  # row vector
 
 
 def local_advection_integrand(verts, p):

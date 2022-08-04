@@ -82,7 +82,7 @@ def animate_plot(mesh, solution):
 def main():
     mesh_json = mload.load_mesh_json(Path("./test_meshes/circle_fine_mesh.json"))
     mesh = mload.parse_json(mesh_json)
-    sol = solve(initial_temp=400, hot_radius=0.7, Tmax=2, timestep=0.005, mesh=mesh)
+    sol = solve(initial_temp=400, hot_radius=0.7, Tmax=2, timestep=0.001, mesh=mesh)
     animate_plot(mesh, sol)
 
 
