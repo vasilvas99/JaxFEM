@@ -72,4 +72,78 @@ Vector fields to test over the circle mesh:
     ![Spinner](./images/spinner.png)
 
 3. $\bar{f}(x,y) = (y, -x)$
+
     ![Right flow](./images/right_flow.png)
+
+
+
+## Least Squares Stabilization of transport problems
+
+Start with:
+
+$$ 
+(Lu, v)  = (f, v), \forall v \in V \rightarrow FEM
+$$
+
+$$
+    (Lu, Lv) = (f, Lv), \forall v \in V \rightarrow LSQ
+$$
+
+$$
+    (Lu, v + \delta Lv) = (f, v + \delta Lv)
+$$
+
+
+Let: 
+
+$$
+Lu = -\epsilon\nabla ^ 2 u + \bar{b} \cdot \nabla u
+$$
+
+Then we obtain the "combined" bilinear form:
+
+$$
+    a_{h} (u, v) = a(u,v) + \delta \sum_{\kappa \in K} (- \epsilon\nabla^2 u + \bar{b} \cdot \nabla u, -\epsilon\nabla^2 v + \bar{b} \cdot \nabla v)_{L^2(K)}
+$$
+
+And the "combined" linear functional:
+
+$$
+    l_{h}(v) = l(v) + \delta \sum_{\kappa \in K} (f, - \epsilon\nabla^2 v + \bar{b} \cdot \nabla v)_{L^2(K)}
+$$
+
+For general elements.
+
+In the case of linear elements ( $\nabla^2 v = 0$ ) the above equations get simplified to:
+
+$$
+a_{h} (u,v)  =  \epsilon(u,v) + (\bar{b}\cdot \nabla u, v) + \delta (\bar{b} \cdot \nabla u, \bar{b} \cdot \nabla v)
+$$
+
+$$
+l_{h} (v) = (f,v) + \delta (f, \bar{b}\cdot \nabla v)
+$$
+
+### Choice of $\delta$
+
+If $\epsilon > h$ :
+
+$$
+        \delta = C h^2
+$$
+
+else:
+
+$$
+    \delta = C h /||b||_{L^{\infty}(\Omega)}
+$$
+
+### Discretization and Matrix formulation
+
+TODO
+
+### Error estimate
+
+$$
+||| u-u_h ||| = O(h^{3/2})
+$$
