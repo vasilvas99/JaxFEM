@@ -1,8 +1,8 @@
 from pathlib import Path
 from time import monotonic
 
-import jax.numpy as jnp
 import jax
+import jax.numpy as jnp
 from jax.config import config
 
 config.update("jax_enable_x64", True)
@@ -12,9 +12,10 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
 import FEMcommon.aux_helpers as helpers
-from FEMcommon.assemble_global import assemble_global_matrix, assemble_global_vector
-from FEMcommon.local_matrices import local_stiffness, local_mass
 import FEMcommon.load_mesh as mload
+from FEMcommon.assemble_global import (assemble_global_matrix,
+                                       assemble_global_vector)
+from FEMcommon.local_matrices import local_mass, local_stiffness
 
 
 def calculate_stiffness_matrix(mesh: mload.Mesh):

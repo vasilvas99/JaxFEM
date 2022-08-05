@@ -1,8 +1,9 @@
+from dataclasses import dataclass
+from typing import Callable
+
 import jax
 import jax.numpy as jnp
 import numpy as onp
-from dataclasses import dataclass
-from typing import Callable
 from scipy.optimize import fsolve, root
 
 

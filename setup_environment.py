@@ -1,7 +1,7 @@
-import platform
 import os
-import subprocess
+import platform
 import shutil
+import subprocess
 
 IS_LINUX = "Linux" in platform.platform()
 

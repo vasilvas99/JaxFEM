@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from random import random
+
 import jax
 import jax.numpy as jnp
 

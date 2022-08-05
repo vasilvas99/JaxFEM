@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
 
+import json
+from dataclasses import dataclass
+from pathlib import Path
+
 import jax
 import jax.numpy as jnp
-import json
-from pathlib import Path
-from dataclasses import dataclass
 
 
 @dataclass

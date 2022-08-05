@@ -1,15 +1,17 @@
-import FEMcommon.load_mesh as mload
-from FEMcommon.local_matrices import local_stiffness, local_mass, local_advection
-from FEMcommon.assemble_global import assemble_global_matrix, assemble_global_vector
-import FEMcommon.aux_helpers as helpers
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 from pathlib import Path
 from time import monotonic
 
-import jax.numpy as jnp
 import jax
+import jax.numpy as jnp
+import matplotlib.animation as animation
+import matplotlib.pyplot as plt
 from jax.config import config
+
+import FEMcommon.aux_helpers as helpers
+import FEMcommon.load_mesh as mload
+from FEMcommon.assemble_global import assemble_global_matrix
+from FEMcommon.local_matrices import (local_advection, local_mass,
+                                      local_stiffness)
 
 config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
