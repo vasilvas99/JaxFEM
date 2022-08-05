@@ -35,12 +35,11 @@ real_coords_jac = jax.jacfwd(real_coords, argnums=1)
 
 
 def triangle_quadrature(verts, integrand):
-    quadrature_weights = jnp.array([1/6, 1/6, 1/6])
-    quadrature_nodes = jnp.array([[1/2, 0], [1/2, 1/2], [0, 1/2]])
+    quadrature_weights = jnp.array([1 / 6, 1 / 6, 1 / 6])
+    quadrature_nodes = jnp.array([[1 / 2, 0], [1 / 2, 1 / 2], [0, 1 / 2]])
 
-    vals_at_nodes = jax.vmap(
-        lambda node: integrand(verts, node))(quadrature_nodes)
-    return quadrature_weights*vals_at_nodes.sum(0)
+    vals_at_nodes = jax.vmap(lambda node: integrand(verts, node))(quadrature_nodes)
+    return quadrature_weights * vals_at_nodes.sum(0)
 
 
 def local_mass_integrand(verts, p):
@@ -57,7 +56,9 @@ def local_stiffness_integrand(verts, p):
     grad_shape_eval = jnp.array(list(map(lambda f: f(p), grad_shapes)))
     jac = real_coords_jac(verts, p)
     jac_inv = jnp.linalg.inv(jac)
-    return (grad_shape_eval@jac_inv@jac_inv.T@grad_shape_eval.T)*jnp.linalg.det(jac)
+    return (grad_shape_eval @ jac_inv @ jac_inv.T @ grad_shape_eval.T) * jnp.linalg.det(
+        jac
+    )
 
 
 def local_stiffness(verts):
@@ -68,12 +69,12 @@ def local_stiffness(verts):
 def local_vector_integrand(verts, p):
     f_eval = jnp.array(list(map(lambda f: f(p), shapes)))
     jac = real_coords_jac(verts, p)
-    return f_eval*jnp.linalg.det(jac)
+    return f_eval * jnp.linalg.det(jac)
 
 
 def right_flow_field_2D(point):
     x, y = point
-    return 2*jnp.array([[3, -1.5*y]])  # row vector
+    return 2 * jnp.array([[3, -1.5 * y]])  # row vector
 
 
 def local_advection_integrand(verts, p):
@@ -82,7 +83,7 @@ def local_advection_integrand(verts, p):
     jac_inv = jnp.linalg.inv(jac)
     b = right_flow_field_2D(real_coords(verts, p))
     grad_shape_eval = jnp.array(list(map(lambda f: f(p), grad_shapes))).T
-    return (f_eval@b@jac_inv@grad_shape_eval)*jnp.linalg.det(jac)
+    return (f_eval @ b @ jac_inv @ grad_shape_eval) * jnp.linalg.det(jac)
 
 
 def local_advection(verts):
@@ -103,8 +104,13 @@ local_vector = jax.jit(local_vector)
 
 def test(n):
     from time import monotonic
-    data = jnp.array([[[random(), random()], [random(), random()], [
-                     random(), random()]] for x in range(n)])
+
+    data = jnp.array(
+        [
+            [[random(), random()], [random(), random()], [random(), random()]]
+            for x in range(n)
+        ]
+    )
     print("Starting execution")
     t = monotonic()
     for d in data:
@@ -115,14 +121,20 @@ def test(n):
 
 def test_vmap(n):
     from time import monotonic
-    data = jnp.array([[[random(), random()], [random(), random()], [
-                     random(), random()]] for x in range(n)])
+
+    data = jnp.array(
+        [
+            [[random(), random()], [random(), random()], [random(), random()]]
+            for x in range(n)
+        ]
+    )
     print("Starting execution")
     t = monotonic()
 
     def execute(d):
         local_mass(d)
         local_stiffness(d)
+
     jax.vmap(execute)(data)
     return monotonic() - t
 
@@ -132,14 +144,14 @@ def test_advection():
     p = jnp.array([0.1, 0.0])
     print(right_flow_field_2D(real_coords(v, p)))
     print(right_flow_field_2D(p))
-    print(f'{local_advection(v)=}')
+    print(f"{local_advection(v)=}")
 
 
 def main():
     n = 5_000_000
     delta = test_vmap(n)
-    print(f'Time taken to run {n} samples {delta}')
-    print(f'Single run time {delta/n}')
+    print(f"Time taken to run {n} samples {delta}")
+    print(f"Single run time {delta/n}")
 
 
 if __name__ == "__main__":
